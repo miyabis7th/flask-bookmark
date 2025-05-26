@@ -3,31 +3,60 @@
 {% block title %}Bookmarks - Bookmark App{% endblock %}
 
 {% block content %}
-    <h1>Bookmarks</h1>
-    <a href="{{ url_for('add_bookmark') }}" class="btn btn-primary mb-3">Add New Bookmark</a>
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-instagram mb-4" data-aos="fade-up">Your Bookmarks</h1>
+        <p class="text-muted" data-aos="fade-up" data-aos-delay="100">Manage your favorite links in one place</p>
+        <a href="{{ url_for('add_bookmark') }}" class="btn btn-instagram-primary my-3" data-aos="zoom-in" data-aos-delay="200">
+            <i class="fas fa-plus-circle me-2"></i>Add New Bookmark
+        </a>
+    </div>
+
     {% if bookmarks %}
-        <ul class="list-group">
+        <div class="row">
             {% for bookmark in bookmarks %}
-                <li class="list-group-item">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5><a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a></h5>
-                            {% if bookmark.description %}
-                                <p>{{ bookmark.description }}</p>
-                            {% endif %}
-                            <small class="text-muted">Added on: {{ bookmark.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                    <div class="bookmark-card card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-bookmark me-2 text-instagram"></i>
+                                <a href="{{ bookmark.url }}" class="text-decoration-none text-dark" target="_blank">
+                                    {{ bookmark.title }}
+                                </a>
+                            </h5>
                         </div>
-                        <div class="btn-group">
-                            <a href="{{ url_for('edit_bookmark', id=bookmark.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                            <form method="POST" action="{{ url_for('delete_bookmark', id=bookmark.id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this bookmark?');">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
+                        <div class="card-body">
+                            {% if bookmark.description %}
+                                <p class="card-text mb-3">{{ bookmark.description }}</p>
+                            {% else %}
+                                <p class="card-text text-muted mb-3"><em>No description provided</em></p>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i> {{ bookmark.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                </small>
+                                
+                                <div class="btn-group">
+                                    <a href="{{ url_for('edit_bookmark', id=bookmark.id) }}" class="btn btn-sm btn-instagram-outline me-2">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </a>
+                                    <form method="POST" action="{{ url_for('delete_bookmark', id=bookmark.id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this bookmark?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>No bookmarks yet. Add one!</p>
+        <div class="text-center py-5 my-5" data-aos="fade-in">
+            <i class="fas fa-bookmark fa-4x mb-3 text-instagram"></i>
+            <h3>No bookmarks yet</h3>
+            <p class="text-muted">Start by adding your first bookmark!</p>
+        </div>
     {% endif %}
 {% endblock %}
