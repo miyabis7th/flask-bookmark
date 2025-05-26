@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 
 # アプリケーションバージョン
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 
 # Cloud SQLとの接続設定
 INSTANCE_CONNECTION_NAME = os.environ.get("INSTANCE_CONNECTION_NAME")
