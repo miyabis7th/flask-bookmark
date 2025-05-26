@@ -58,8 +58,8 @@ db = SQLAlchemy(app)
 
 # タグとブックマークの関連テーブル
 bookmark_tags = db.Table('bookmark_tags',
-    db.Column('bookmark_id', db.Integer, db.ForeignKey('bookmark.id'), primary_key=True),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+    db.Column('bookmark_id', db.Integer, db.ForeignKey('bookmark.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
 )
 
 # Tagモデルの定義
@@ -128,6 +128,7 @@ def add_bookmark():
         try:
             # ブックマークの作成
             new_bookmark = Bookmark(title=title, url=url, description=description or None)
+            db.session.add(new_bookmark)
             
             # タグの処理
             if tags_input:
@@ -140,7 +141,6 @@ def add_bookmark():
                         db.session.add(tag)
                     new_bookmark.tags.append(tag)
             
-            db.session.add(new_bookmark)
             db.session.commit()
             flash('Bookmark added successfully!', 'success')
             return redirect(url_for('bookmarks'))
