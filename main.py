@@ -9,6 +9,9 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 
+# アプリケーションバージョン
+APP_VERSION = "1.0.1"
+
 # Cloud SQLとの接続設定
 INSTANCE_CONNECTION_NAME = os.environ.get("INSTANCE_CONNECTION_NAME")
 DB_USER = os.environ.get("DB_USER")
@@ -75,7 +78,7 @@ def index():
 @app.route('/bookmarks')
 def bookmarks():
     bookmarks = Bookmark.query.order_by(Bookmark.created_at.desc()).all()
-    return render_template('bookmarks.html', bookmarks=bookmarks)
+    return render_template('bookmarks.html', bookmarks=bookmarks, app_version=APP_VERSION)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_bookmark():
@@ -86,7 +89,7 @@ def add_bookmark():
 
         if not title or not url:
             flash('Title and URL are required!', 'error')
-            return render_template('add_bookmark.html')
+            return render_template('add_bookmark.html', app_version=APP_VERSION)
 
         try:
             new_bookmark = Bookmark(title=title, url=url, description=description or None)
@@ -97,9 +100,9 @@ def add_bookmark():
         except Exception as e:
             db.session.rollback()
             flash('Error adding bookmark. Please try again.', 'error')
-            return render_template('add_bookmark.html')
+            return render_template('add_bookmark.html', app_version=APP_VERSION)
     
-    return render_template('add_bookmark.html')
+    return render_template('add_bookmark.html', app_version=APP_VERSION)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
