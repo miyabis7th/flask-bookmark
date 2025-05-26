@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags - Bookmark App{% endblock %}
+
+{% block content %}
+    <h1>All Tags</h1>
+    
+    {% if tags %}
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="m-0">Tags</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for tag in tags %}
+                            <a href="{{ url_for('bookmarks_by_tag', tag_id=tag.id) }}" class="btn btn-outline-secondary mb-2 me-2">
+                                {{ tag.name }}
+                                <span class="badge bg-secondary">{{ tag.bookmarks|length }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('bookmarks') }}" class="btn btn-primary">View All Bookmarks</a>
+    {% else %}
+        <p>No tags yet. Add a bookmark with tags!</p>
+        <a href="{{ url_for('add_bookmark') }}" class="btn btn-primary">Add Bookmark</a>
+    {% endif %}
+{% endblock %}

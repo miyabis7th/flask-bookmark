@@ -3,7 +3,13 @@
 {% block title %}Bookmarks - Bookmark App{% endblock %}
 
 {% block content %}
-    <h1>Bookmarks</h1>
+    <h1>{{ title|default('Bookmarks') }}</h1>
+    {% if tag %}
+        <div class="mb-3">
+            <span class="badge bg-secondary">{{ tag.name }}</span>
+            <a href="{{ url_for('bookmarks') }}" class="btn btn-outline-secondary btn-sm ms-2">All Bookmarks</a>
+        </div>
+    {% endif %}
     <a href="{{ url_for('add_bookmark') }}" class="btn btn-primary mb-3">Add New Bookmark</a>
     {% if bookmarks %}
         <ul class="list-group">
@@ -12,6 +18,13 @@
                     <h5><a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a></h5>
                     {% if bookmark.description %}
                         <p>{{ bookmark.description }}</p>
+                    {% endif %}
+                    {% if bookmark.tags %}
+                        <div class="mb-2">
+                            {% for tag in bookmark.tags %}
+                                <a href="{{ url_for('bookmarks_by_tag', tag_id=tag.id) }}" class="badge bg-secondary text-decoration-none me-1">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                     <small class="text-muted">Added on: {{ bookmark.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                 </li>

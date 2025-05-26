@@ -17,6 +17,11 @@
             <label for="description" class="form-label">Description (Optional)</label>
             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
         </div>
+        <div class="mb-3">
+            <label for="tags" class="form-label">Tags (Comma separated, Optional)</label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="例: python, programming, tutorial">
+            <div class="form-text">複数のタグはカンマで区切ってください。</div>
+        </div>
         <button type="submit" class="btn btn-primary">Add Bookmark</button>
     </form>
 {% endblock %}
