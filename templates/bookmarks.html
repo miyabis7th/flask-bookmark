@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Bookmarks - Bookmark App{% endblock %}
+
+{% block content %}
+    <h1>Bookmarks</h1>
+    <a href="{{ url_for('add_bookmark') }}" class="btn btn-primary mb-3">Add New Bookmark</a>
+    {% if bookmarks %}
+        <ul class="list-group">
+            {% for bookmark in bookmarks %}
+                <li class="list-group-item">
+                    <h5><a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a></h5>
+                    {% if bookmark.description %}
+                        <p>{{ bookmark.description }}</p>
+                    {% endif %}
+                    <small class="text-muted">Added on: {{ bookmark.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookmarks yet. Add one!</p>
+    {% endif %}
+{% endblock %}

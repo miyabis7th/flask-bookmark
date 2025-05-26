@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+psycopg2-binary
+cloud-sql-python-connector[pg8000]
+python-dotenv
+gunicorn
