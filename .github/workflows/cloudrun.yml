@@ -12,7 +12,8 @@ env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   REGION: ${{ secrets.REGION }}
-  IMAGE_NAME: gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.SERVICE_NAME }}
+  REPOSITORY: bookmark-app-repo
+  IMAGE_NAME: asia-northeast1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/bookmark-app-repo/${{ secrets.SERVICE_NAME }}
 
 jobs:
   test:
@@ -54,8 +55,8 @@ jobs:
         with:
           project_id: ${{ secrets.PROJECT_ID }}
 
-      - name: Configure Docker for Container Registry
-        run: gcloud auth configure-docker gcr.io
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
 
       - name: Build Docker image
         run: |
