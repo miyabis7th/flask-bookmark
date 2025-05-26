@@ -104,5 +104,45 @@ def add_bookmark():
     
     return render_template('add_bookmark.html', app_version=APP_VERSION)
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_bookmark(id):
+    bookmark = Bookmark.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        url = request.form.get('url', '').strip()
+        description = request.form.get('description', '').strip()
+
+        if not title or not url:
+            flash('Title and URL are required!', 'error')
+            return render_template('edit_bookmark.html', bookmark=bookmark, app_version=APP_VERSION)
+
+        try:
+            bookmark.title = title
+            bookmark.url = url
+            bookmark.description = description or None
+            db.session.commit()
+            flash('Bookmark updated successfully!', 'success')
+            return redirect(url_for('bookmarks'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Error updating bookmark. Please try again.', 'error')
+            return render_template('edit_bookmark.html', bookmark=bookmark, app_version=APP_VERSION)
+    
+    return render_template('edit_bookmark.html', bookmark=bookmark, app_version=APP_VERSION)
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_bookmark(id):
+    bookmark = Bookmark.query.get_or_404(id)
+    try:
+        db.session.delete(bookmark)
+        db.session.commit()
+        flash('Bookmark deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Error deleting bookmark. Please try again.', 'error')
+    
+    return redirect(url_for('bookmarks'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
